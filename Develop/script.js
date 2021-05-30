@@ -79,17 +79,18 @@ var loadContent = function() {
 // populate page on load
 loadContent();
 
-// audit tasks every 30 minutes
+// audit tasks every 15 minutes
 setInterval(function() {
     $("textarea").each(function(){
         var timeId = $(this).attr('id');
         auditTask(timeId);
     });
-    console.log("audited");
-}, 1800000);
+    console.log("Page Audited");
+}, (1000*60)*15);
 
 // set date every day
 setInterval(function() {
     // set current date at top of page 
     $("#currentDay").text(moment().format("dddd, MMMM Do"));
+    console.log("Day Updated");
 }, (((1000 * 60) * 60) * 24));
