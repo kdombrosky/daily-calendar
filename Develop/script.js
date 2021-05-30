@@ -93,4 +93,4 @@ setInterval(function() {
     // set current date at top of page 
     $("#currentDay").text(moment().format("dddd, MMMM Do"));
     console.log("Day Updated");
-}, (((1000 * 60) * 60) * 24));
+}, (((1000 * 60) * 60) * 12));
