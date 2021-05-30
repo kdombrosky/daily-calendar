@@ -30,6 +30,7 @@ var saveTask = function() {
 
     // save to local storage
     localStorage.setItem(timeId, textContent);
+    console.log("Saved: '" + timeId + " - " + textContent + "'");
 };
 
 // load initial files 
@@ -48,8 +49,8 @@ var loadContent = function() {
         
         // time column
         var taskDiv = document.createElement("div");
+        taskDiv.className = "col d-flex align-items-center border-top";
         taskDiv.textContent = timeId;
-        taskDiv.className = "time-block col";
         taskContainer.appendChild(taskDiv);
 
         // text area column

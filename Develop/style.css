@@ -26,7 +26,6 @@ textarea{
 }
 
 .time-block{
-  /*margin-top: 5px;*/
   text-align: center;
   border-radius: 15px;
 }
@@ -69,4 +68,8 @@ textarea{
 .saveBtn i:hover {
   font-size: 20px;
   transition: all .3s ease-in-out;
+}
+
+.saveBtn i:active {
+  outline: none;
 }
