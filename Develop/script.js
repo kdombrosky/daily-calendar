@@ -1,32 +1,47 @@
 var plannerContainerEl = document.querySelector(".container");
-var tasks = [];
 
+// to update tasks imminence bg-color
+var auditTask = function(timeId) {
+    // target the element by id
+    var targetEl = document.querySelector("textarea[id='" + timeId + "']");
+    // remove any old classes from element
+    targetEl.className = 'col-10';
 
-// display current day and date at top of page
-// include this part in the auditTasks(); 30 minute interval checkup 
-$("#currentDay").text(moment().format("dddd, MMMM Do"));
-
-var auditTasks = function() {
-    // set current date at top of page 
-    $("#currentDay").text(moment().format("dddd, MMMM Do"));
+    // format time to just be a number string
+    var formatedTime = moment(timeId, "h A").format("H");
+    // set as new formatted moment object at specific time
+    var taskTime = moment().set("hour", formatedTime);
 
     // loop through tasks array to set bg color
-}
+    if (moment().diff(taskTime, "hours") == 0) {
+        targetEl.className = 'col-10 present';
+    } else if (moment().diff(taskTime, "hours") >= 1) {
+        targetEl.className = 'col-10 past';
+    } else if (Math.abs(moment().diff(taskTime, "hours")) >= 1 ){
+        targetEl.className = 'col-10 future';
+    }
+};
 
-// to compare current time to timeID
-// currentTime = moment().format("h A"); 
-// if (currentTime === timeId) {
-//     // set class name to .present
-// } else if (currentTime.diff idk)
+// to save task on button click
+var saveTask = function() {
+    // get current button's id and paired text content
+    var timeId = $(this).attr('id');
+    var textContent = document.querySelector("textarea[id='" + timeId + "']").value;
 
+    // save to local storage
+    localStorage.setItem(timeId, textContent);
+};
 
 // load initial files 
 var loadContent = function() {
-    // use moment to create an element for each loop from 9 to 5 pm (9-17 in 24hr time)
-    for (i=9; i<18; i++) {
-        // create unique id for each textarea and button
-        var timeId = moment().set("hour", i).format("h A");
+    // display current day and date at top of page
+    $("#currentDay").text(moment().format("dddd, MMMM Do"));
 
+    // use moment to create an element for each hour out of a 9 hour day
+    for (i=0; i<9; i++) {
+        // create unique id for each textarea and button using moment 24 hour time (9-17pm)
+        var timeId = moment().set("hour", (i+9)).format("h A");
+        
         // container to hold each column 
         var taskContainer = document.createElement("div");
         taskContainer.className = "row";
@@ -39,30 +54,41 @@ var loadContent = function() {
 
         // text area column
         var textArea = document.createElement("textarea");
-        textArea.className = "col-10 past";
+        textArea.className = "col-10";
         textArea.setAttribute("id", timeId);
+        // load text value from local storage if there is one
+        textArea.value = localStorage.getItem(timeId);
         taskContainer.appendChild(textArea);
 
-        // save to local storage button
+        // save to local storage button column
         var saveBtn = document.createElement("button");
         saveBtn.innerHTML= '<i class="fas fa-save"></i>';
-        saveBtn.className = "col saveBtn";
+        saveBtn.className = "col saveBtn btn";
         saveBtn.setAttribute("id", timeId);
         taskContainer.appendChild(saveBtn);
-        //saveBtn.addEventListener("click", saveTask);
+        saveBtn.addEventListener("click", saveTask);
 
         // append whole taskContainer to plannerContainerEl
         plannerContainerEl.appendChild(taskContainer);
+
+        auditTask(timeId);
     }
-}
+};
 
-// if save button is clicked: 
-// get parent id attribute 
-// select the text area inside the parent id Element
-// get the text area value 
-
+// populate page on load
 loadContent();
 
+// audit tasks every 30 minutes
+setInterval(function() {
+    $("textarea").each(function(){
+        var timeId = $(this).attr('id');
+        auditTask(timeId);
+    });
+    console.log("audited");
+}, 1800000);
 
-
-
+// set date every day
+setInterval(function() {
+    // set current date at top of page 
+    $("#currentDay").text(moment().format("dddd, MMMM Do"));
+}, (((1000 * 60) * 60) * 24));
