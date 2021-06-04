@@ -79,14 +79,14 @@ var loadContent = function() {
 // populate page on load
 loadContent();
 
-// audit tasks every 15 minutes
+// audit tasks every minute
 setInterval(function() {
     $("textarea").each(function(){
         var timeId = $(this).attr('id');
         auditTask(timeId);
     });
     console.log("Page Audited");
-}, (1000*60)*15);
+}, 1000);
 
 // set date every day
 setInterval(function() {
